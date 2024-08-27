@@ -229,6 +229,9 @@ int main(void)
     
     /* reduce ldo before enter deepsleep mode */
     pwc_ldo_output_voltage_set(PWC_LDO_OUTPUT_1V0);
+	
+	/* congfig the voltage regulator mode.only used with deep sleep mode */
+    pwc_voltage_regulate_set(PWC_REGULATOR_EXTRA_LOW_POWER);
 
     /* enter deep sleep mode */
     pwc_deep_sleep_mode_enter(PWC_DEEP_SLEEP_ENTER_WFI);
@@ -263,6 +266,9 @@ int main(void)
     
     /* reduce ldo before enter deepsleep mode */
     pwc_ldo_output_voltage_set(PWC_LDO_OUTPUT_1V0);
+	
+	/* congfig the voltage regulator mode.only used with deep sleep mode */
+    pwc_voltage_regulate_set(PWC_REGULATOR_EXTRA_LOW_POWER);
 
     /* enter deep sleep mode */
     pwc_deep_sleep_mode_enter(PWC_DEEP_SLEEP_ENTER_WFI);
@@ -309,7 +315,7 @@ void i2c_lowlevel_init(i2c_handle_type* hi2c)
     exint_init_struct.line_select        = EXINT_LINE_23;
     exint_init_struct.line_enable        = TRUE;
     exint_init_struct.line_polarity      = EXINT_TRIGGER_RISING_EDGE;
-    exint_init_struct.line_mode          = EXINT_LINE_INTERRUPUT;
+    exint_init_struct.line_mode          = EXINT_LINE_INTERRUPT;
     exint_init(&exint_init_struct);
     
     /* pwc periph clock enable */
