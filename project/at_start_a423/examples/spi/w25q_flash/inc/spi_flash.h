@@ -37,14 +37,14 @@
 
 
  /* use dma transfer spi data */
-#define SPI_TRANS_DMA
+//#define SPI_TRANS_DMA
 
 /** @defgroup SPI_flash_cs_pin_definition
   * @{
   */
 
-#define FLASH_CS_HIGH()                  gpio_bits_set(GPIOD, GPIO_PINS_0)
-#define FLASH_CS_LOW()                   gpio_bits_reset(GPIOD, GPIO_PINS_0)
+#define FLASH_CS_HIGH()                  gpio_bits_set(GPIOB, GPIO_PINS_12)
+#define FLASH_CS_LOW()                   gpio_bits_reset(GPIOB, GPIO_PINS_12)
 
 /**
   * @}

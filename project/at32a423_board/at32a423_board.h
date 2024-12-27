@@ -1,6 +1,6 @@
 /**
   **************************************************************************
-  * @file     at32a423_board.c
+  * @file     at32a423_board.h
   * @brief    header file for at-start board. set of firmware functions to
   *           manage leds and push-button. initialize delay function.
   **************************************************************************

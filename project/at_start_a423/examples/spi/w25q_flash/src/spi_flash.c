@@ -45,42 +45,41 @@ void spiflash_init(void)
   gpio_init_type gpio_initstructure;
   spi_init_type spi_init_struct;
 
-  crm_periph_clock_enable(CRM_GPIOC_PERIPH_CLOCK, TRUE);
-  crm_periph_clock_enable(CRM_GPIOD_PERIPH_CLOCK, TRUE);
+  crm_periph_clock_enable(CRM_GPIOB_PERIPH_CLOCK, TRUE);
   crm_periph_clock_enable(CRM_DMA1_PERIPH_CLOCK, TRUE);
-  /* software cs, pd0 as a general io to control flash cs */
+  /* software cs, pb12 as a general io to control flash cs */
   gpio_initstructure.gpio_out_type       = GPIO_OUTPUT_PUSH_PULL;
   gpio_initstructure.gpio_pull           = GPIO_PULL_UP;
   gpio_initstructure.gpio_mode           = GPIO_MODE_OUTPUT;
   gpio_initstructure.gpio_drive_strength = GPIO_DRIVE_STRENGTH_STRONGER;
-  gpio_initstructure.gpio_pins           = GPIO_PINS_0;
-  gpio_init(GPIOD, &gpio_initstructure);
+  gpio_initstructure.gpio_pins           = GPIO_PINS_12;
+  gpio_init(GPIOB, &gpio_initstructure);
 
   /* sck */
   gpio_initstructure.gpio_pull           = GPIO_PULL_UP;
   gpio_initstructure.gpio_mode           = GPIO_MODE_MUX;
-  gpio_initstructure.gpio_pins           = GPIO_PINS_1;
-  gpio_init(GPIOD, &gpio_initstructure);
-  gpio_pin_mux_config(GPIOD, GPIO_PINS_SOURCE1, GPIO_MUX_6);
+  gpio_initstructure.gpio_pins           = GPIO_PINS_13;
+  gpio_init(GPIOB, &gpio_initstructure);
+  gpio_pin_mux_config(GPIOB, GPIO_PINS_SOURCE13, GPIO_MUX_5);
 
   /* miso */
   gpio_initstructure.gpio_pull           = GPIO_PULL_UP;
-  gpio_initstructure.gpio_pins           = GPIO_PINS_2;
-  gpio_init(GPIOC, &gpio_initstructure);
-  gpio_pin_mux_config(GPIOC, GPIO_PINS_SOURCE2, GPIO_MUX_5);
+  gpio_initstructure.gpio_pins           = GPIO_PINS_14;
+  gpio_init(GPIOB, &gpio_initstructure);
+  gpio_pin_mux_config(GPIOB, GPIO_PINS_SOURCE14, GPIO_MUX_5);
 
   /* mosi */
   gpio_initstructure.gpio_pull           = GPIO_PULL_UP;
-  gpio_initstructure.gpio_pins           = GPIO_PINS_4;
-  gpio_init(GPIOD, &gpio_initstructure);
-  gpio_pin_mux_config(GPIOD, GPIO_PINS_SOURCE4, GPIO_MUX_6);
+  gpio_initstructure.gpio_pins           = GPIO_PINS_15;
+  gpio_init(GPIOB, &gpio_initstructure);
+  gpio_pin_mux_config(GPIOB, GPIO_PINS_SOURCE15, GPIO_MUX_5);
 
   FLASH_CS_HIGH();
   crm_periph_clock_enable(CRM_SPI2_PERIPH_CLOCK, TRUE);
   spi_default_para_init(&spi_init_struct);
   spi_init_struct.transmission_mode = SPI_TRANSMIT_FULL_DUPLEX;
   spi_init_struct.master_slave_mode = SPI_MODE_MASTER;
-  spi_init_struct.mclk_freq_division = SPI_MCLK_DIV_32;
+  spi_init_struct.mclk_freq_division = SPI_MCLK_DIV_8;
   spi_init_struct.first_bit_transmission = SPI_FIRST_BIT_MSB;
   spi_init_struct.frame_bit_num = SPI_FRAME_8BIT;
   spi_init_struct.clock_polarity = SPI_CLOCK_POLARITY_HIGH;
@@ -346,6 +345,9 @@ void spi_bytes_write(uint8_t *pbuffer, uint32_t length)
 
   while(dma_flag_get(DMA1_FDT2_FLAG) == RESET);
   dma_flag_clear(DMA1_FDT2_FLAG);
+  
+  /* wait spi idle when communication end */
+  while(spi_i2s_flag_get(SPI2, SPI_I2S_BF_FLAG) != RESET);
 
   dma_channel_enable(DMA1_CHANNEL2, FALSE);
   dma_channel_enable(DMA1_CHANNEL3, FALSE);
@@ -361,6 +363,9 @@ void spi_bytes_write(uint8_t *pbuffer, uint32_t length)
     dummy_data = spi_i2s_data_receive(SPI2);
     pbuffer++;
   }
+  
+  /* wait spi idle when communication end */
+  while(spi_i2s_flag_get(SPI2, SPI_I2S_BF_FLAG) != RESET);
 #endif
 }
 
@@ -413,6 +418,9 @@ void spi_bytes_read(uint8_t *pbuffer, uint32_t length)
 
   while(dma_flag_get(DMA1_FDT2_FLAG) == RESET);
   dma_flag_clear(DMA1_FDT2_FLAG);
+  
+  /* wait spi idle when communication end */
+  while(spi_i2s_flag_get(SPI2, SPI_I2S_BF_FLAG) != RESET);
 
   dma_channel_enable(DMA1_CHANNEL2, FALSE);
   dma_channel_enable(DMA1_CHANNEL3, FALSE);
@@ -428,6 +436,9 @@ void spi_bytes_read(uint8_t *pbuffer, uint32_t length)
     *pbuffer = spi_i2s_data_receive(SPI2);
     pbuffer++;
   }
+  
+  /* wait spi idle when communication end */
+  while(spi_i2s_flag_get(SPI2, SPI_I2S_BF_FLAG) != RESET);
 #endif
 }
 
@@ -500,7 +511,10 @@ uint8_t spi_byte_write(uint8_t data)
   spi_i2s_data_transmit(SPI2, data);
   while(spi_i2s_flag_get(SPI2, SPI_I2S_RDBF_FLAG) == RESET);
   brxbuff = spi_i2s_data_receive(SPI2);
+  
+  /* wait spi idle when communication end */
   while(spi_i2s_flag_get(SPI2, SPI_I2S_BF_FLAG) != RESET);
+  
   return brxbuff;
 }
 
