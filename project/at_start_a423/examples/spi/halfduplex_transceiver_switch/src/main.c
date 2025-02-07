@@ -260,7 +260,7 @@ int main(void)
   /* test result:the data check */
   transfer_status1 = buffer_compare(spi2_buffer_rx, spi3_buffer_tx, BUFFER_SIZE);
 
-  /* config spi3 send spi2 receive */
+  /* config spi2 send spi3 receive */
   spi_enable(SPI3, FALSE);
   spi_enable(SPI2, FALSE);
   

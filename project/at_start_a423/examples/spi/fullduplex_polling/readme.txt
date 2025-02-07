@@ -11,7 +11,7 @@
   - spi2                     spi3 
     pb12(cs)        <--->     pa4(cs)
     pb13(sck)       <--->     pc10(sck)
-    pb14(miso)      <--->     pc11 (miso)
+    pb14(miso)      <--->     pc11(miso)
     pb15(mosi)      <--->     pc12(mosi)
 
   for more detailed information. please refer to the application note document AN0102.

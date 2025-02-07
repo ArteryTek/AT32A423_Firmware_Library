@@ -78,13 +78,10 @@ static void dma_config(void)
   dma_init_type dma_init_struct;
 
   crm_periph_clock_enable(CRM_DMA1_PERIPH_CLOCK, TRUE);
-  dma_reset(DMA1_CHANNEL1);
-  dma_reset(DMA1_CHANNEL2);
-  dma_reset(DMA1_CHANNEL3);
-  dma_reset(DMA1_CHANNEL4);
   dmamux_enable(DMA1, TRUE);
   
   /* use dma1_channel1 as spi2 transmit channel */
+  dma_reset(DMA1_CHANNEL1);
   dma_default_para_init(&dma_init_struct);
   dma_init_struct.buffer_size = BUFFER_SIZE;
   dma_init_struct.memory_data_width = DMA_MEMORY_DATA_WIDTH_BYTE;
