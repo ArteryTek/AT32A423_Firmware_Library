@@ -1,9 +1,10 @@
 /**
   **************************************************************************
-  * @file     at32a423_mcudbg.h
-  * @brief    at32a423 mcudbg header file
+  * @file     at32a423_debug.h
+  * @brief    at32a423 debug header file
   **************************************************************************
-  *                       Copyright notice & Disclaimer
+  *
+  * Copyright (c) 2025, Artery Technology, All rights reserved.
   *
   * The software Board Support Package (BSP) that is made available to
   * download from Artery official website is the copyrighted work of Artery.
@@ -23,8 +24,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __AT32A423_MCUDBG_H
-#define __AT32A423_MCUDBG_H
+#ifndef __AT32A423_DEBUG_H
+#define __AT32A423_DEBUG_H
 
 #ifdef __cplusplus
 extern "C" {

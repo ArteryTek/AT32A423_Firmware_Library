@@ -3,7 +3,8 @@
   * @file     main.c
   * @brief    main program
   **************************************************************************
-  *                       Copyright notice & Disclaimer
+  *
+  * Copyright (c) 2025, Artery Technology, All rights reserved.
   *
   * The software Board Support Package (BSP) that is made available to
   * download from Artery official website is the copyrighted work of Artery.
@@ -111,6 +112,8 @@ int main(void)
 
   button_exint_init();
 
+  uart_print_init(115200);
+  printf("at32 mcu initialize ok.\r\n");
   while(1)
   {
     at32_led_toggle(LED2);
